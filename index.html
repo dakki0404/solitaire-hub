@@ -3,156 +3,2400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solitaire Hub</title>
+<title>Classic Games</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0} :root{--bg:#07101f;--panel:#0d1a2e;--panel2:#12233d;--blue:#3d8bff;--green:#22b66d;--text:#f5f7fb;--muted:#9caecc;--red:#d92f3f;--card:#fff;--cardw:78px;--cardh:110px} body{font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top,#152b4d 0,#07101f 58%);color:var(--text);min-height:100vh} button{font:inherit}.hidden{display:none!important}
-header{height:70px;background:rgba(7,16,31,.92);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}.brand{font-weight:900;font-size:22px}.brand span{color:var(--blue)}.header-actions{display:flex;gap:10px}.btn{border:1px solid rgba(255,255,255,.1);background:var(--panel2);color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}.btn:hover{background:#1a3458}.btn.primary{background:var(--blue);border-color:var(--blue)}
-.home{max-width:1120px;margin:auto;padding:46px 22px 60px}.hero{text-align:center;max-width:760px;margin:0 auto 34px}.hero h1{font-size:clamp(36px,7vw,64px);line-height:1.05;margin-bottom:14px}.hero h1 span{color:var(--blue)}.hero p{color:var(--muted);font-size:17px;line-height:1.6}.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}.game-card{background:linear-gradient(180deg,rgba(19,39,66,.92),rgba(11,25,43,.96));border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:20px;min-height:220px;display:flex;flex-direction:column;cursor:pointer;transition:.2s;box-shadow:0 14px 35px rgba(0,0,0,.18)}.game-card:hover{transform:translateY(-5px);border-color:rgba(61,139,255,.5)}.game-icon{font-size:48px;margin-bottom:14px}.game-card h2{font-size:21px;margin-bottom:8px}.game-card p{color:var(--muted);line-height:1.5;font-size:14px}.game-card .play{margin-top:auto;padding-top:18px;color:#9fc4ff;font-weight:800}.tip{margin:28px auto 0;max-width:800px;color:#8ea5c5;text-align:center;font-size:13px}
-#gameScreen{min-height:calc(100vh - 70px);padding:20px 18px 50px}.game-shell{max-width:1180px;margin:auto}.game-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px;flex-wrap:wrap}.game-title h1{font-size:30px}.game-title p{color:var(--muted);font-size:13px;margin-top:4px}.stats{display:flex;gap:9px;flex-wrap:wrap}.stat{background:rgba(255,255,255,.06);padding:9px 12px;border-radius:9px;color:var(--muted);font-size:13px}.stat strong{color:#fff;margin-left:4px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}.board{background:rgba(5,13,26,.45);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:20px;min-height:470px;position:relative;overflow:hidden}.area-row{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:28px}.piles{display:flex;gap:12px;flex-wrap:wrap}.pile,.foundation,.waste,.slot{width:var(--cardw);height:var(--cardh);position:relative;border-radius:9px}.slot{border:2px dashed rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.18);font-size:24px}.tableau{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;align-items:start}.column{position:relative;min-height:390px}.column .slot{position:relative}.card{width:var(--cardw);height:var(--cardh);position:absolute;background:#fff;color:#111;border-radius:9px;box-shadow:0 5px 15px rgba(0,0,0,.34);user-select:none;cursor:pointer;overflow:hidden}.card.red{color:#d62839}.card.black{color:#111}.card.back{background:linear-gradient(135deg,#145cc4,#3d8bff);border:4px solid #fff}.card.back:before{content:"";position:absolute;inset:5px;border:2px solid rgba(255,255,255,.55);border-radius:5px;background:repeating-linear-gradient(45deg,rgba(255,255,255,.13) 0 2px,transparent 2px 7px)}.ct,.cb{position:absolute;font-weight:900;font-size:17px;line-height:.9;display:flex;flex-direction:column;align-items:center;z-index:2}.ct{left:7px;top:6px}.cb{right:7px;bottom:6px;transform:rotate(180deg)}.sym{font-size:19px}.cc{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:41px;z-index:1}.selected{outline:3px solid #ffd83d;outline-offset:2px;z-index:9999!important}.mini{font-size:12px;color:var(--muted)}
-/* generic pile areas */
-.generic-grid{display:grid;grid-template-columns:repeat(4,var(--cardw));gap:28px;justify-content:center;align-items:start}.generic-column{position:relative;min-height:230px}.free-row{display:flex;justify-content:center;gap:24px;margin-bottom:28px}.centered{justify-content:center}
-/* Golf */
-.golf-tableau{display:grid;grid-template-columns:repeat(7,1fr);gap:11px}.golf-col{position:relative;min-height:325px}.golf-card{position:absolute}
-/* Accordion */
-.accordion-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--cardw),1fr));gap:10px;align-items:start}.acc-stack{min-height:var(--cardh);position:relative}.acc-stack .card{position:relative!important;left:0!important;top:0!important}.acc-stack.selectable{cursor:pointer}
-/* Idiot */
-.idiot-board{display:grid;grid-template-columns:repeat(4,var(--cardw));justify-content:center;gap:20px}.idiot-col{position:relative;min-height:390px}.idiot-card{position:absolute}
-/* message */
-.message{margin-top:14px;padding:11px 13px;border-radius:10px;background:rgba(255,255,255,.05);color:#b5c5df;text-align:center;min-height:42px}.win{background:rgba(34,182,109,.14);color:#97f0c0}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.68);display:flex;align-items:center;justify-content:center;z-index:500;padding:20px}.modal-card{background:var(--panel);border:1px solid rgba(255,255,255,.1);border-radius:18px;width:min(92vw,440px);padding:28px;box-shadow:0 25px 80px rgba(0,0,0,.5);text-align:center}.modal-card h2{margin-bottom:10px}.modal-card p{color:var(--muted);line-height:1.6;margin-bottom:20px}.modal-actions{display:flex;justify-content:center;gap:10px}
-@media(max-width:900px){:root{--cardw:64px;--cardh:91px}.tableau,.golf-tableau{gap:7px}.board{padding:13px}.generic-grid{gap:18px}.column,.golf-col,.idiot-col{min-height:330px}}
-@media(max-width:640px){:root{--cardw:50px;--cardh:70px}.brand{font-size:18px}.home{padding:30px 13px}.games{grid-template-columns:1fr 1fr;gap:10px}.game-card{padding:14px;min-height:185px}.game-icon{font-size:34px}.game-card h2{font-size:16px}.game-card p{font-size:12px}.game-card .play{font-size:12px}.game-title h1{font-size:24px}.stats .stat{padding:7px 9px}.area-row{gap:8px}.piles{gap:6px}.tableau,.golf-tableau{gap:4px}.ct,.cb{font-size:10px;left:3px}.cb{left:auto;right:3px}.sym{font-size:11px}.cc{font-size:23px}.generic-grid{grid-template-columns:repeat(4,var(--cardw));gap:9px}.free-row{gap:8px}.idiot-board{gap:7px}.column,.golf-col,.idiot-col{min-height:285px}}
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #07101f;
+    color: white;
+    min-height: 100vh;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* HEADER */
+
+header {
+    height: 68px;
+    background: #0b1830;
+    border-bottom: 1px solid #203452;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.brand {
+    font-weight: 800;
+    font-size: 22px;
+}
+
+.brand span {
+    color: #59a0ff;
+}
+
+.head-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    border: 1px solid #29415f;
+    background: #12233d;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 9px;
+}
+
+.btn:hover {
+    background: #193456;
+}
+
+.primary {
+    background: #3d8bff;
+    border-color: #3d8bff;
+}
+
+.primary:hover {
+    background: #5a9cff;
+}
+
+/* MAIN */
+
+main {
+    max-width: 1180px;
+    margin: auto;
+    padding: 28px 18px 50px;
+}
+
+/* HOME */
+
+.hero {
+    text-align: center;
+    padding: 15px 0 30px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin: 0 0 10px;
+}
+
+.hero p {
+    color: #9eb0ca;
+    margin: 0;
+}
+
+.games {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+}
+
+.game-card {
+    background: #0d1a2e;
+    border: 1px solid #1c304d;
+    border-radius: 18px;
+    padding: 24px;
+    min-height: 220px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: 0.2s;
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+    border-color: #3d8bff;
+}
+
+.game-icon {
+    font-size: 52px;
+}
+
+.game-card h2 {
+    margin: 12px 0 6px;
+}
+
+.game-card p {
+    color: #9eb0ca;
+    line-height: 1.4;
+    min-height: 48px;
+}
+
+/* GAME SCREEN */
+
+.screen-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.screen-title h1 {
+    margin: 0;
+}
+
+.game-wrap {
+    background: #0b1830;
+    border: 1px solid #1c304d;
+    border-radius: 18px;
+    padding: 18px;
+    min-height: 620px;
+}
+
+.statusbar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    color: #b7c7dd;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.pill {
+    background: #12233d;
+    padding: 7px 11px;
+    border-radius: 999px;
+}
+
+/* SOLITAIRE */
+
+.sol-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.piles,
+.foundations {
+    display: flex;
+    gap: 12px;
+}
+
+.pile {
+    width: 78px;
+    height: 110px;
+    border: 2px dashed #36506f;
+    border-radius: 10px;
+    position: relative;
+}
+
+.empty-label {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #536b88;
+    font-size: 27px;
+}
+
+.card {
+    width: 78px;
+    height: 110px;
+    background: white;
+    border-radius: 10px;
+    color: #111;
+    position: absolute;
+    box-shadow: 0 4px 10px #0008;
+    border: 1px solid #ddd;
+    user-select: none;
+}
+
+.card.red {
+    color: #c82626;
+}
+
+.card.back {
+    background:
+        linear-gradient(
+            135deg,
+            #1b64c7,
+            #3d8bff
+        );
+    border: 4px solid white;
+}
+
+.card .corner {
+    position: absolute;
+    left: 6px;
+    top: 5px;
+    line-height: 1.05;
+    font-weight: 800;
+    font-size: 16px;
+    text-align: center;
+}
+
+.card .center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 40px;
+}
+
+.card.selected {
+    outline: 3px solid #ffd63d;
+    outline-offset: 2px;
+}
+
+.tableau {
+    display: grid;
+    grid-template-columns:
+        repeat(7, minmax(60px, 1fr));
+    gap: 10px;
+}
+
+.column {
+    position: relative;
+    min-height: 430px;
+}
+
+.column.empty {
+    border: 2px dashed #233b59;
+    border-radius: 10px;
+}
+
+.column.empty:after {
+    content: "K";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: start center;
+    padding-top: 10px;
+    color: #3b5472;
+}
+
+.table-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* SNAKE */
+
+.canvas-wrap {
+    text-align: center;
+}
+
+.game-canvas {
+    background: #06101e;
+    border: 1px solid #29415f;
+    border-radius: 12px;
+    max-width: 100%;
+}
+
+.keys {
+    margin-top: 10px;
+    color: #92a7c1;
+    text-align: center;
+}
+
+/* APPLE */
+
+.apple-board {
+    width: min(720px, 100%);
+    height: 430px;
+    margin: 0 auto;
+
+    background:
+        linear-gradient(
+            #081523,
+            #102c1d
+        );
+
+    border: 1px solid #29415f;
+    border-radius: 14px;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.apple-basket {
+    position: absolute;
+    width: 110px;
+    height: 24px;
+
+    border: 5px solid #c58a4a;
+    border-top: 0;
+    border-radius: 0 0 25px 25px;
+
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.apple {
+    position: absolute;
+    font-size: 36px;
+    filter: drop-shadow(0 4px 3px #0007);
+}
+
+/* MINESWEEPER */
+
+.mine-board {
+    display: grid;
+    grid-template-columns:
+        repeat(9, 34px);
+    grid-auto-rows: 34px;
+
+    gap: 3px;
+
+    justify-content: center;
+    margin: 18px auto;
+}
+
+.mine-cell {
+    border: 1px solid #29415f;
+    background: #17304e;
+    color: white;
+    font-weight: 800;
+    border-radius: 4px;
+}
+
+.mine-cell.open {
+    background: #0c1b2e;
+}
+
+.mine-cell.flag {
+    background: #6a3f2b;
+}
+
+/* MODAL */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+
+    background: #000a;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 50;
+}
+
+.modal {
+    background: #0d1a2e;
+    border: 1px solid #29415f;
+    border-radius: 18px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    width: min(90%, 420px);
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .sol-top {
+        flex-direction: column;
+    }
+
+    .tableau {
+        gap: 5px;
+    }
+
+    .pile,
+    .card {
+        width: 58px;
+    }
+
+    .pile,
+    .card {
+        height: 82px;
+    }
+
+    .card .center {
+        font-size: 28px;
+    }
+
+    .card .corner {
+        font-size: 12px;
+    }
+
+    .column {
+        min-height: 340px;
+    }
+}
 </style>
 </head>
+
 <body>
+
 <header>
-  <div class="brand">🃏 <span>Solitaire</span> Hub</div>
-  <div class="header-actions"><button class="btn" id="homeBtn">Home</button><button class="btn primary" id="newGameTop">New Game</button></div>
+    <div class="brand">
+        🎮 <span>Classic Games</span>
+    </div>
+
+    <div class="head-actions">
+        <button
+            class="btn"
+            onclick="goHome()"
+        >
+            Home
+        </button>
+    </div>
 </header>
 
-<section id="homeScreen" class="home">
-  <div class="hero">
-    <h1>Pick your <span>Solitaire</span></h1>
-    <p>Choose a game and play right in your browser. Everything runs locally, so this is perfect for GitHub Pages.</p>
-  </div>
-  <div class="games" id="gameCards"></div>
-  <div class="tip">Tip: on desktop you can use drag-and-drop in the games that support it, or simply click cards to select and move them.</div>
-</section>
+<main>
 
-<section id="gameScreen" class="hidden">
-  <div class="game-shell">
-    <div class="game-head">
-      <div class="game-title"><h1 id="gameTitle">Solitaire</h1><p id="gameSubtitle"></p></div>
-      <div class="stats"><div class="stat">Moves <strong id="moves">0</strong></div><div class="stat">Time <strong id="timer">00:00</strong></div><div class="stat" id="extraStatWrap">Cards <strong id="extraStat">0</strong></div></div>
+<section id="homeScreen">
+
+    <div class="hero">
+        <h1>Choose a Game</h1>
+
+        <p>
+            Simple classic games you can play
+            right in your browser.
+        </p>
     </div>
-    <div class="toolbar" id="toolbar"></div>
-    <div class="board" id="board"></div>
-    <div id="message" class="message">Choose a move to begin.</div>
-  </div>
+
+    <div class="games">
+
+        <div class="game-card">
+
+            <div>
+                <div class="game-icon">♠️</div>
+
+                <h2>Solitaire</h2>
+
+                <p>
+                    Classic Klondike Solitaire.
+                </p>
+            </div>
+
+            <button
+                class="btn primary"
+                onclick="openGame('solitaire')"
+            >
+                Play
+            </button>
+
+        </div>
+
+
+        <div class="game-card">
+
+            <div>
+                <div class="game-icon">🐍</div>
+
+                <h2>Snake</h2>
+
+                <p>
+                    Eat apples, grow longer,
+                    and don't hit yourself.
+                </p>
+            </div>
+
+            <button
+                class="btn primary"
+                onclick="openGame('snake')"
+            >
+                Play
+            </button>
+
+        </div>
+
+
+        <div class="game-card">
+
+            <div>
+                <div class="game-icon">🍎</div>
+
+                <h2>Apple Catcher</h2>
+
+                <p>
+                    Move the basket and catch
+                    falling apples.
+                </p>
+            </div>
+
+            <button
+                class="btn primary"
+                onclick="openGame('apple')"
+            >
+                Play
+            </button>
+
+        </div>
+
+
+        <div class="game-card">
+
+            <div>
+                <div class="game-icon">💣</div>
+
+                <h2>Minesweeper</h2>
+
+                <p>
+                    Open safe squares and
+                    avoid the mines.
+                </p>
+            </div>
+
+            <button
+                class="btn primary"
+                onclick="openGame('mines')"
+            >
+                Play
+            </button>
+
+        </div>
+
+    </div>
+
 </section>
 
-<div id="winModal" class="modal hidden">
-  <div class="modal-card"><div style="font-size:52px">🏆</div><h2 id="winTitle">You won!</h2><p id="winText"></p><div class="modal-actions"><button class="btn" id="modalHome">Home</button><button class="btn primary" id="modalNew">Play Again</button></div></div>
+
+<section
+    id="gameScreen"
+    class="hidden"
+>
+
+    <div class="screen-title">
+
+        <h1 id="gameTitle"></h1>
+
+        <button
+            class="btn"
+            onclick="goHome()"
+        >
+            ← Games
+        </button>
+
+    </div>
+
+    <div id="gameMount"></div>
+
+</section>
+
+</main>
+
+
+<div
+    id="modal"
+    class="overlay hidden"
+>
+
+    <div class="modal">
+
+        <h2 id="modalTitle"></h2>
+
+        <p id="modalText"></p>
+
+        <button
+            class="btn primary"
+            onclick="closeModal(); restartCurrent()"
+        >
+            Play Again
+        </button>
+
+    </div>
+
 </div>
 
+
 <script>
-const SUITS=['♠','♥','♦','♣'], RED=['♥','♦'], RANKS=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-const GAMES={
-  klondike:{title:'Normal Solitaire',icon:'♠️',desc:'Classic seven-column Klondike with foundations, stock, waste, undo and click-to-move.'},
-  idiot:{title:"Idiot's Delight",icon:'🃏',desc:'Aces Up-style solitaire: remove lower cards of matching suits and try to leave only the four aces.'},
-  canfield:{title:'Canfield',icon:'♦️',desc:'A tougher classic with a 13-card reserve, four foundations and wraparound building.'},
-  accordion:{title:'Accordion',icon:'🪗',desc:'Compress the 52 cards into one pile by matching rank or suit one or three positions away.'},
-  golf:{title:'Golf Solitaire',icon:'⛳',desc:'Clear seven columns of visible cards by playing one rank higher or lower onto the waste.'}
-};
-let currentGame=null,timer=0,timerId=null,moves=0,selected=null,history=[];
-const $=id=>document.getElementById(id);
-function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function deck(){let a=[];for(const s of SUITS)for(let i=0;i<13;i++)a.push({id:crypto.randomUUID?crypto.randomUUID():Math.random().toString(36),suit:s,rank:RANKS[i],value:i+1,up:true});return shuffle(a)}
-function red(c){return RED.includes(c.suit)}
-function fmt(t){return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
-function startClock(){if(timerId)return;timerId=setInterval(()=>{timer++;$('timer').textContent=fmt(timer)},1000)}
-function stopClock(){clearInterval(timerId);timerId=null}
-function setMsg(text,win=false){$('message').textContent=text;$('message').classList.toggle('win',win)}
-function setMoves(){ $('moves').textContent=moves }
-function snapshot(state){history.push(JSON.stringify(state));if(history.length>80)history.shift()}
-function undo(){if(!history.length)return;const x=JSON.parse(history.pop());loadState(x);selected=null;render();setMsg('Move undone.')}
-function cardHTML(c,small=false){if(!c.up)return '<div class="card back"></div>';return `<div class="card ${red(c)?'red':'black'}"><div class="ct">${c.rank}<span class="sym">${c.suit}</span></div><div class="cc">${['J','Q','K'].includes(c.rank)?`<b>${c.rank}</b>`:centerPips(c)}</div><div class="cb">${c.rank}<span class="sym">${c.suit}</span></div></div>`}
-function centerPips(c){if(['A','J','Q','K'].includes(c.rank))return c.suit;return Array(c.value).fill(c.suit).join(' ')}
-function attach(el,fn){el.addEventListener('click',e=>{e.stopPropagation();fn(e)})}
-function showGame(key){currentGame=key; $('homeScreen').classList.add('hidden');$('gameScreen').classList.remove('hidden');$('gameTitle').textContent=GAMES[key].title;$('gameSubtitle').textContent=GAMES[key].desc;$('extraStatWrap').classList.remove('hidden');timer=0;moves=0;selected=null;history=[];stopClock();$('timer').textContent='00:00';setMoves();closeModal();newGame()}
-function showHome(){stopClock();currentGame=null;$('gameScreen').classList.add('hidden');$('homeScreen').classList.remove('hidden');closeModal()}
-function addBtn(text,fn,primary=false){const b=document.createElement('button');b.className='btn'+(primary?' primary':'');b.textContent=text;attach(b,fn);$('toolbar').appendChild(b)}
-function setupToolbar(){ $('toolbar').innerHTML='';addBtn('↩ Undo',undo);addBtn('🔄 New Game',newGame,true);if(currentGame==='klondike')addBtn('⚡ Auto Move',autoMove);if(currentGame==='idiot')addBtn('Deal 4',idiotDeal,true);if(currentGame==='accordion')addBtn('Deal All',()=>{while(accDeck.length)accDealOne()},true)}
-function newGame(){timer=0;moves=0;selected=null;history=[];stopClock();$('timer').textContent='00:00';setMoves();setupToolbar();if(currentGame==='klondike')initKlondike();if(currentGame==='idiot')initIdiot();if(currentGame==='canfield')initCanfield();if(currentGame==='accordion')initAccordion();if(currentGame==='golf')initGolf()}
-function closeModal(){$('winModal').classList.add('hidden')}
-function win(text,title='You won!'){stopClock();$('winTitle').textContent=title;$('winText').textContent=text;$('winModal').classList.remove('hidden')}
 
-/* ---------- KLONDIKE ---------- */
-let K={stock:[],waste:[],found:[[],[],[],[]],tab:[[],[],[],[],[],[],[]]};
-function initKlondike(){const d=deck(),K0={stock:[],waste:[],found:[[],[],[],[]],tab:[[],[],[],[],[],[],[]]};let n=0;for(let col=0;col<7;col++)for(let r=0;r<=col;r++){let c=d[n++];c.up=r===col;K0.tab[col].push(c)}K0.stock=d.slice(n);K=K0;state=()=>K;renderKlondike();setMsg('Click a card, then click its destination. Double-click moves cards to a foundation.')}
-function renderKlondike(){const b=$('board');b.innerHTML='<div class="area-row"><div class="piles"><div class="pile" id="kstock"></div><div class="pile" id="kwaste"></div></div><div class="piles" id="kfound"></div></div><div class="tableau" id="ktab"></div>';const stock=$('kstock'),w=$('kwaste');stock.innerHTML=K.stock.length?cardHTML({up:false}):'<div class="slot">↻</div>';w.innerHTML=K.waste.length?cardHTML(K.waste.at(-1)):'<div class="slot"></div>';attach(stock,drawK);attach(w,()=>selectK('waste',0,K.waste.at(-1)?.id));const f=$('kfound');K.found.forEach((p,i)=>{const x=document.createElement('div');x.className='foundation';x.innerHTML=p.length?cardHTML(p.at(-1)):`<div class="slot">${SUITS[i]}</div>`;attach(x,()=>selected&&moveKFoundation(i));f.appendChild(x)});const t=$('ktab');K.tab.forEach((col,ci)=>{const el=document.createElement('div');el.className='column';if(!col.length){const s=document.createElement('div');s.className='slot';s.textContent='K';el.appendChild(s);attach(s,()=>selected&&moveKTab(ci));}col.forEach((c,i)=>{const wrap=document.createElement('div');wrap.innerHTML=cardHTML(c);const ce=wrap.firstElementChild;ce.style.top=(i*30)+'px';ce.style.zIndex=i+1;ce.classList.toggle('selected',selected?.game==='k'&&selected.id===c.id);el.appendChild(ce);attach(ce,()=>{if(!c.up)return;if(selected)moveKTab(ci,c.id);else selectK('tab',ci,c.id)});attach(ce,()=>{});if(c.up){ce.ondblclick=e=>{e.stopPropagation();selected={game:'k',src:'tab',col:ci,id:c.id,cards:[c]};for(let j=0;j<4;j++)if(canKFoundation(c,K.found[j])){moveKFoundation(j);break}}}});t.appendChild(el)});}
-function drawK(){startClock();snapshot(K);if(K.stock.length){let c=K.stock.pop();c.up=true;K.waste.push(c)}else{K.stock=K.waste.reverse();K.stock.forEach(c=>c.up=false);K.waste=[]}moves++;setMoves();renderKlondike()}
-function selectK(src,col,id){if(!id)return;selected={game:'k',src,col,id};renderKlondike();setMsg('Selected. Click a valid destination.')}
-function canKTable(cards,target){if(!cards.length)return false;if(!target.length)return cards[0].rank==='K';let t=target.at(-1);return t.up&&red(cards[0])!==red(t)&&cards[0].value===t.value-1}
-function canKFoundation(c,p){if(!p.length)return c.value===1;let t=p.at(-1);return t.suit===c.suit&&c.value===t.value+1}
-function getKCards(){if(!selected)return[];if(selected.src==='waste')return [K.waste.at(-1)];const col=K.tab[selected.col],i=col.findIndex(c=>c.id===selected.id);return i<0?[]:col.slice(i)}
-function moveKTab(target,clickedId){if(!selected)return;const cards=getKCards();if(!cards.length)return;if(selected.src==='tab'&&selected.col===target)return;if(!canKTable(cards,K.tab[target])){if(clickedId)selectK('tab',target,clickedId);return}snapshot(K);if(selected.src==='waste')K.waste.pop();else{let s=K.tab[selected.col],i=s.findIndex(c=>c.id===selected.id);K.tab[selected.col]=s.slice(0,i);flipK(selected.col)}K.tab[target].push(...cards);moves++;selected=null;setMoves();renderKlondike();checkKWin()}
-function flipK(col){let p=K.tab[col];if(p.length&&!p.at(-1).up)p.at(-1).up=true}
-function moveKFoundation(i){if(!selected)return;const cards=getKCards();if(cards.length!==1||!canKFoundation(cards[0],K.found[i]))return; snapshot(K);if(selected.src==='waste')K.waste.pop();else{let s=K.tab[selected.col],j=s.findIndex(c=>c.id===selected.id);s.splice(j,1);flipK(selected.col)}K.found[i].push(cards[0]);moves++;selected=null;setMoves();renderKlondike();checkKWin()}
-function autoMove(){if(K.waste.length){let c=K.waste.at(-1);let i=SUITS.indexOf(c.suit);if(canKFoundation(c,K.found[i])){selected={game:'k',src:'waste',id:c.id};moveKFoundation(i);return}}K.tab.forEach((p,ci)=>{if(!p.length)return;let c=p.at(-1),i=SUITS.indexOf(c.suit);if(canKFoundation(c,K.found[i])){selected={game:'k',src:'tab',col:ci,id:c.id};moveKFoundation(i)}})}
-function checkKWin(){if(K.found.every(x=>x.length===13))win(`You cleared all 52 cards in ${moves} moves.`)}
+/* =====================================================
+   GENERAL
+===================================================== */
 
-/* ---------- IDIOT'S DELIGHT / ACES UP ---------- */
-let I={stock:[],tab:[[],[],[],[]],discard:[]};
-function initIdiot(){I={stock:deck(),tab:[[],[],[],[]],discard:[]};idiotDeal();setMsg("Remove lower top cards when another top card has the same suit. Goal: leave only four aces.")}
-function idiotDeal(){if(!I.stock.length){checkIWin();return}if(I.tab.some(p=>p.length===0)){for(let i=0;i<4;i++)if(I.tab[i].length===0){const donor=I.tab.find(p=>p.length);if(donor)I.tab[i].push(donor.pop())} }snapshot(I);for(let i=0;i<4&&I.stock.length;i++)I.tab[i].push(I.stock.pop());moves++;setMoves();autoDiscardI();renderIdiot();checkIWin()}
-function autoDiscardI(){let changed=true;while(changed){changed=false;for(let i=0;i<4;i++){let a=I.tab[i].at(-1);if(!a)continue;for(let j=0;j<4;j++){if(i===j)continue;let b=I.tab[j].at(-1);if(b&&a.suit===b.suit&&b.value>a.value){I.discard.push(I.tab[i].pop());changed=true;break}}}}
-  for(let i=0;i<4;i++)if(!I.tab[i].length){let donor=I.tab.find(p=>p.length);if(donor)I.tab[i].push(donor.pop())}
+let currentGame = "";
+
+function openGame(game) {
+
+    currentGame = game;
+
+    document
+        .getElementById("homeScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("gameScreen")
+        .classList.remove("hidden");
+
+    const titles = {
+        solitaire: "♠️ Solitaire",
+        snake: "🐍 Snake",
+        apple: "🍎 Apple Catcher",
+        mines: "💣 Minesweeper"
+    };
+
+    document
+        .getElementById("gameTitle")
+        .textContent = titles[game];
+
+    if (game === "solitaire") {
+        initSolitaire();
+    }
+
+    if (game === "snake") {
+        initSnake();
+    }
+
+    if (game === "apple") {
+        initApple();
+    }
+
+    if (game === "mines") {
+        initMines();
+    }
 }
-function renderIdiot(){const b=$('board');b.innerHTML='<div class="area-row"><div class="piles"><div class="pile" id="istock"></div><div class="pile"><div class="slot">🗑</div></div></div><div class="stat">Stock <strong>'+I.stock.length+'</strong></div></div><div class="idiot-board" id="iboard"></div>';const s=$('istock');s.innerHTML=I.stock.length?cardHTML({up:false}):'<div class="slot">✓</div>';attach(s,idiotDeal);const box=$('iboard');I.tab.forEach((p,i)=>{const col=document.createElement('div');col.className='idiot-col';p.forEach((c,j)=>{const wrap=document.createElement('div');wrap.innerHTML=cardHTML(c);const ce=wrap.firstElementChild;ce.style.top=(j*30)+'px';ce.style.zIndex=j+1;attach(ce,()=>selectIdiot(i));col.appendChild(ce)});if(!p.length){const sl=document.createElement('div');sl.className='slot';sl.textContent='';col.appendChild(sl);attach(sl,()=>fillI(i))}box.appendChild(col)});$('extraStat').textContent=I.discard.length}
-function selectIdiot(i){if(!I.tab[i].length)return; if(selected?.game==='i'&&selected.col===i){selected=null;renderIdiot();return}selected={game:'i',col:i};renderIdiot();setMsg('Select an empty pile to move this top card, or wait for automatic discards.')}
-function fillI(target){if(!selected||selected.game!=='i'||I.tab[target].length)return;const src=selected.col;if(!I.tab[src].length)return;snapshot(I);I.tab[target].push(I.tab[src].pop());selected=null;moves++;setMoves();autoDiscardI();renderIdiot();checkIWin()}
-function checkIWin(){if(I.stock.length===0&&I.tab.every(p=>p.length===1&&p[0].value===1)){win(`You left all four aces on the table in ${moves} moves.`);return}if(I.stock.length===0&&I.tab.every(p=>p.length===1)){/* still play state, non-ace means rules issue */}}
 
-/* ---------- CANFIELD ---------- */
-let C={stock:[],waste:[],reserve:[],found:[[],[],[],[]],tab:[[],[],[],[]],base:0};
-function initCanfield(){let d=deck();C={stock:[],waste:[],reserve:[],found:[[],[],[],[]],tab:[[],[],[],[]],base:0};C.base=d[0].value;let first=d.shift();first.up=true;C.found[SUITS.indexOf(first.suit)].push(first);for(let i=0;i<13;i++){let c=d.shift();c.up=i===12;C.reserve.push(c)}for(let i=0;i<4;i++)C.tab[i].push(d.shift());C.stock=d;setMsg(`Base rank: ${RANKS[C.base-1]}. Foundations build upward by suit and wrap after King.`);renderCanfield()}
-function nextUp(v){return v===13?1:v+1}function nextDown(v){return v===1?13:v-1}
-function canCT(c,p){if(!p.length)return !C.reserve.length?true:false;let t=p.at(-1);return red(c)!==red(t)&&c.value===nextDown(t.value)}
-function canCF(c,p,i){if(!p.length)return c.value===C.base;if(p.length===13)return false;let t=p.at(-1);return c.suit===t.suit&&c.value===nextUp(t.value)}
-function renderCanfield(){const b=$('board');b.innerHTML='<div class="area-row"><div class="piles"><div class="pile" id="creserve"></div><div class="pile" id="cstock"></div><div class="pile" id="cwaste"></div></div><div class="piles" id="cfound"></div></div><div class="generic-grid" id="ctab"></div>';const r=$('creserve'),s=$('cstock'),w=$('cwaste');r.innerHTML=C.reserve.length?cardHTML(C.reserve.at(-1)):'<div class="slot">R</div>';attach(r,()=>selectC('reserve'));s.innerHTML=C.stock.length?cardHTML({up:false}):'<div class="slot">↻</div>';attach(s,drawC);w.innerHTML=C.waste.length?cardHTML(C.waste.at(-1)):'<div class="slot"></div>';attach(w,()=>selectC('waste'));const f=$('cfound');C.found.forEach((p,i)=>{const x=document.createElement('div');x.className='foundation';x.innerHTML=p.length?cardHTML(p.at(-1)):`<div class="slot">${SUITS[i]}</div>`;attach(x,()=>selected&&moveCF(i));f.appendChild(x)});const t=$('ctab');C.tab.forEach((p,i)=>{const x=document.createElement('div');x.className='generic-column';p.forEach((c,j)=>{const wr=document.createElement('div');wr.innerHTML=cardHTML(c);const ce=wr.firstElementChild;ce.style.top=(j*30)+'px';ce.style.zIndex=j+1;x.appendChild(ce);attach(ce,()=>selected?moveCT(i):selectC('tab',i,c.id))});t.appendChild(x)})}
-function drawC(){startClock();snapshot(C);for(let n=0;n<3&&C.stock.length;n++){const c=C.stock.pop();c.up=true;C.waste.push(c)}moves++;setMoves();autoRefillC();renderCanfield()}
-function selectC(src,i,id){let c=src==='waste'?C.waste.at(-1):src==='reserve'?C.reserve.at(-1):C.tab[i]?.at(-1);if(!c)return;selected={game:'c',src,col:i,id:c.id};renderCanfield();setMsg('Selected. Try a foundation or tableau destination.')}
-function getCSel(){if(selected.src==='waste')return [C.waste.at(-1)];if(selected.src==='reserve')return [C.reserve.at(-1)];const p=C.tab[selected.col],i=p.findIndex(c=>c.id===selected.id);return i<0?[]:p.slice(i)}
-function removeCSel(){if(selected.src==='waste')C.waste.pop();else if(selected.src==='reserve')C.reserve.pop();else{const p=C.tab[selected.col],i=p.findIndex(c=>c.id===selected.id);C.tab[selected.col]=p.slice(0,i)}}
-function moveCT(target){const cards=getCSel();if(!cards.length||!canCT(cards[0],C.tab[target]))return;snapshot(C);removeCSel();C.tab[target].push(...cards);selected=null;moves++;setMoves();autoRefillC();renderCanfield();checkCWin()}
-function moveCF(i){const cards=getCSel();if(cards.length!==1||!canCF(cards[0],C.found[i],i))return;snapshot(C);removeCSel();C.found[i].push(cards[0]);selected=null;moves++;setMoves();autoRefillC();renderCanfield();checkCWin()}
-function autoRefillC(){for(let i=0;i<4;i++)if(!C.tab[i].length&&C.reserve.length)C.tab[i].push(C.reserve.pop());}
-function checkCWin(){if(C.found.every(p=>p.length===13))win(`All 52 cards reached the foundations in ${moves} moves.`)}
 
-/* ---------- ACCORDION ---------- */
-let A={stacks:[],deck:[],dealt:0};let accDeck=[];
-function initAccordion(){A={stacks:[],deck:deck(),dealt:0};accDeck=A.deck.slice();while(accDeck.length)accDealOne();renderAccordion();setMsg('Click a pile, then a pile one position or three positions to the left when rank or suit matches.')}
-function accDealOne(){const c=accDeck.shift();if(!c)return;A.stacks.push([c]);A.dealt++;renderAccordion()}
-function renderAccordion(){const b=$('board');b.innerHTML='<div class="area-row"><div class="stat">Piles <strong>'+A.stacks.length+'</strong></div><div class="stat">Cards <strong>'+A.stacks.reduce((n,p)=>n+p.length,0)+'</strong></div></div><div class="accordion-board" id="aboard"></div>';const ab=$('aboard');A.stacks.forEach((stack,i)=>{const x=document.createElement('div');x.className='acc-stack';const c=stack.at(-1);x.innerHTML=cardHTML(c);const ce=x.firstElementChild;ce.style.position='relative';ce.classList.toggle('selected',selected?.game==='a'&&selected.i===i);attach(ce,()=>selectA(i));ab.appendChild(x)})}
-function selectA(i){if(!selected){selected={game:'a',i};renderAccordion();setMsg('Now click one pile to the left or three piles to the left, if the top cards match in rank or suit.');return}if(selected.i===i){selected=null;renderAccordion();return}const from=selected.i,to=i;const ok=(to===from-1||to===from-3)&&to>=0&&((A.stacks[from].at(-1).rank===A.stacks[to].at(-1).rank)||(A.stacks[from].at(-1).suit===A.stacks[to].at(-1).suit));if(!ok){setMsg('That move is not legal.');return}snapshot(A);A.stacks[to].push(...A.stacks[from]);A.stacks.splice(from,1);moves++;setMoves();selected=null;renderAccordion();if(A.stacks.length===1)win(`You compressed all 52 cards into one pile in ${moves} moves.`)}
+function goHome() {
 
-/* ---------- GOLF ---------- */
-let G={stock:[],waste:[],cols:[[],[],[],[],[],[],[]]};
-function initGolf(){let d=deck();G={stock:[],waste:[],cols:[[],[],[],[],[],[],[]]};for(let r=0;r<5;r++)for(let c=0;c<7;c++)G.cols[c].push(d.shift());G.stock=d;G.waste.push(G.stock.pop());renderGolf();setMsg('Play a card one rank above or below the waste. Suits do not matter.')}
-function canGolf(c){const t=G.waste.at(-1);if(!t)return true;return c.value===t.value+1||c.value===t.value-1}
-function renderGolf(){const b=$('board');b.innerHTML='<div class="area-row"><div class="piles"><div class="pile" id="gstock"></div><div class="pile" id="gwaste"></div></div><div class="stat">Stock <strong>'+G.stock.length+'</strong></div></div><div class="golf-tableau" id="gtable"></div>';const s=$('gstock'),w=$('gwaste');s.innerHTML=G.stock.length?cardHTML({up:false}):'<div class="slot">✓</div>';attach(s,drawGolf);w.innerHTML=G.waste.length?cardHTML(G.waste.at(-1)):'<div class="slot"></div>';const t=$('gtable');G.cols.forEach((col,ci)=>{const x=document.createElement('div');x.className='golf-col';for(let j=0;j<col.length;j++){const c=col[j],wr=document.createElement('div');wr.innerHTML=cardHTML(c);const ce=wr.firstElementChild;ce.style.top=(j*19)+'px';ce.style.zIndex=j+1;attach(ce,()=>playGolf(ci));x.appendChild(ce)}if(!col.length){const sl=document.createElement('div');sl.className='slot';x.appendChild(sl)}t.appendChild(x)})}
-function playGolf(ci){const c=G.cols[ci].at(-1);if(!c)return;if(!canGolf(c)){setMsg('That card is not one rank above or below the waste.');return}snapshot(G);G.cols[ci].pop();G.waste.push(c);moves++;setMoves();renderGolf();checkGolf()}
-function drawGolf(){if(!G.stock.length){checkGolf(true);return}startClock();snapshot(G);G.waste.push(G.stock.pop());moves++;setMoves();renderGolf();checkGolf()}
-function checkGolf(out=false){if(G.cols.every(c=>!c.length)){win(`You cleared all 35 tableau cards in ${moves} moves.`);return}if(out&&G.stock.length===0&&!G.cols.some(c=>c.length&&canGolf(c.at(-1))))setMsg('No more moves. New Game to try again.')}
+    document
+        .getElementById("gameScreen")
+        .classList.add("hidden");
 
-function render(){if(currentGame==='klondike')renderKlondike();if(currentGame==='idiot')renderIdiot();if(currentGame==='canfield')renderCanfield();if(currentGame==='accordion')renderAccordion();if(currentGame==='golf')renderGolf()}
-function loadState(x){if(currentGame==='klondike')K=x;if(currentGame==='idiot')I=x;if(currentGame==='canfield')C=x;if(currentGame==='accordion')A=x;if(currentGame==='golf')G=x}
+    document
+        .getElementById("homeScreen")
+        .classList.remove("hidden");
 
-/* Home */
-Object.entries(GAMES).forEach(([key,g])=>{const c=document.createElement('div');c.className='game-card';c.innerHTML=`<div class="game-icon">${g.icon}</div><h2>${g.title}</h2><p>${g.desc}</p><div class="play">Play ${g.title} →</div>`;attach(c,()=>showGame(key));$('gameCards').appendChild(c)});
-attach($('homeBtn'),showHome);attach($('newGameTop'),()=>currentGame?newGame():null);attach($('modalHome'),showHome);attach($('modalNew'),()=>{closeModal();newGame()});
-showHome();
+    if (snakeTimer) {
+        clearInterval(snakeTimer);
+    }
+
+    if (appleTimer) {
+        clearInterval(appleTimer);
+    }
+}
+
+
+function closeModal() {
+
+    document
+        .getElementById("modal")
+        .classList.add("hidden");
+}
+
+
+function win(title, text) {
+
+    document
+        .getElementById("modalTitle")
+        .textContent = title;
+
+    document
+        .getElementById("modalText")
+        .textContent = text;
+
+    document
+        .getElementById("modal")
+        .classList.remove("hidden");
+}
+
+
+function restartCurrent() {
+
+    openGame(currentGame);
+}
+
+
+/* =====================================================
+   SOLITAIRE
+===================================================== */
+
+const suits = [
+    "♠",
+    "♥",
+    "♦",
+    "♣"
+];
+
+const ranks = [
+    "A",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "J",
+    "Q",
+    "K"
+];
+
+let s = {};
+
+
+function makeDeck() {
+
+    let deck = [];
+
+    for (let suitIndex = 0; suitIndex < 4; suitIndex++) {
+
+        for (let r = 0; r < 13; r++) {
+
+            deck.push({
+
+                id:
+                    Math.random()
+                        .toString(36)
+                        .slice(2),
+
+                suit:
+                    suits[suitIndex],
+
+                rank:
+                    ranks[r],
+
+                value:
+                    r + 1,
+
+                red:
+                    suitIndex === 1 ||
+                    suitIndex === 2,
+
+                up:
+                    false
+            });
+        }
+    }
+
+    return deck;
+}
+
+
+function shuffle(array) {
+
+    for (
+        let i = array.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        let j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            array[i],
+            array[j]
+        ] = [
+            array[j],
+            array[i]
+        ];
+    }
+
+    return array;
+}
+
+
+function initSolitaire() {
+
+    s = {
+
+        deck:
+            shuffle(makeDeck()),
+
+        stock: [],
+
+        waste: [],
+
+        found: [
+            [],
+            [],
+            [],
+            []
+        ],
+
+        tab: [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+
+        selected: null,
+
+        moves: 0
+    };
+
+
+    let p = 0;
+
+
+    for (
+        let column = 0;
+        column < 7;
+        column++
+    ) {
+
+        for (
+            let row = 0;
+            row <= column;
+            row++
+        ) {
+
+            let card = s.deck[p++];
+
+            card.up =
+                row === column;
+
+            s.tab[column].push(card);
+        }
+    }
+
+
+    s.stock =
+        s.deck.slice(p);
+
+
+    renderSolitaire();
+}
+
+
+function cardHTML(card, back = false) {
+
+    if (back) {
+
+        return `
+            <div class="card back"></div>
+        `;
+    }
+
+
+    return `
+        <div
+            class="card
+            ${card.red ? "red" : ""}
+            ${card.up ? "" : "back"}"
+        >
+
+            <div class="corner">
+                ${card.rank}<br>
+                ${card.suit}
+            </div>
+
+            ${
+                card.up
+                ?
+                `<div class="center">
+                    ${
+                        ["J", "Q", "K"]
+                            .includes(card.rank)
+                        ? card.rank
+                        : card.suit
+                    }
+                </div>`
+                :
+                ""
+            }
+
+        </div>
+    `;
+}
+
+
+function renderSolitaire() {
+
+    let html = `
+
+        <div class="statusbar">
+
+            <span class="pill">
+                Moves:
+                ${s.moves}
+            </span>
+
+            <button
+                class="btn primary"
+                onclick="solDraw()"
+            >
+                Draw
+            </button>
+
+            <button
+                class="btn"
+                onclick="initSolitaire()"
+            >
+                New Game
+            </button>
+
+        </div>
+
+
+        <div class="sol-top">
+
+            <div class="piles">
+
+                <div
+                    class="pile"
+                    onclick="solDraw()"
+                >
+
+                    ${
+                        s.stock.length
+                        ?
+                        cardHTML(
+                            s.stock.at(-1),
+                            true
+                        )
+                        :
+                        `<div class="empty-label">
+                            ↻
+                        </div>`
+                    }
+
+                </div>
+
+
+                <div class="pile">
+
+                    ${
+                        s.waste.length
+                        ?
+                        cardHTML(
+                            s.waste.at(-1)
+                        )
+                        :
+                        `<div class="empty-label">
+                            •
+                        </div>`
+                    }
+
+                </div>
+
+            </div>
+
+
+            <div class="foundations">
+    `;
+
+
+    for (let f = 0; f < 4; f++) {
+
+        html += `
+
+            <div
+                class="pile"
+                onclick="solFoundation(${f})"
+            >
+
+                ${
+                    s.found[f].length
+                    ?
+                    cardHTML(
+                        s.found[f].at(-1)
+                    )
+                    :
+                    `<div class="empty-label">
+                        ${suits[f]}
+                    </div>`
+                }
+
+            </div>
+        `;
+    }
+
+
+    html += `
+            </div>
+        </div>
+
+        <div class="tableau">
+    `;
+
+
+    for (
+        let column = 0;
+        column < 7;
+        column++
+    ) {
+
+        html += `
+            <div
+                class="
+                    column
+                    ${s.tab[column].length
+                        ? ""
+                        : "empty"}
+                "
+                onclick="
+                    solColumn(${column})
+                "
+            >
+        `;
+
+
+        s.tab[column].forEach(
+            (card, index) => {
+
+                let selected =
+
+                    s.selected &&
+                    s.selected.cardId === card.id
+                    ?
+                    "selected"
+                    :
+                    "";
+
+
+                html += `
+
+                    <div
+                        class="table-card"
+                        style="
+                            top:${index * 28}px;
+                            z-index:${index + 1}
+                        "
+                        onclick="
+                            event.stopPropagation();
+                            solCard(
+                                ${column},
+                                ${index}
+                            )
+                        "
+                    >
+
+                        <div
+                            class="${selected}"
+                        >
+                            ${cardHTML(card)}
+                        </div>
+
+                    </div>
+                `;
+            }
+        );
+
+
+        html += `
+            </div>
+        `;
+    }
+
+
+    html += `
+        </div>
+    `;
+
+
+    document
+        .getElementById("gameMount")
+        .innerHTML = html;
+}
+
+
+function solCard(column, index) {
+
+    let card =
+        s.tab[column][index];
+
+
+    if (!card.up) {
+        return;
+    }
+
+
+    if (
+        s.selected &&
+        s.selected.type === "tab" &&
+        s.selected.col === column &&
+        s.selected.index === index
+    ) {
+
+        s.selected = null;
+
+        renderSolitaire();
+
+        return;
+    }
+
+
+    if (s.selected) {
+
+        if (solTryTab(column)) {
+            return;
+        }
+
+        if (solTryFoundationFromSelection()) {
+            return;
+        }
+    }
+
+
+    s.selected = {
+
+        type: "tab",
+
+        col: column,
+
+        index: index,
+
+        cardId: card.id
+    };
+
+
+    renderSolitaire();
+}
+
+
+function solColumn(target) {
+
+    if (!s.selected) {
+        return;
+    }
+
+    solTryTab(target);
+}
+
+
+function solTryTab(target) {
+
+    if (!s.selected) {
+        return false;
+    }
+
+
+    let selected =
+        s.selected;
+
+    let moving;
+
+
+    if (selected.type === "tab") {
+
+        moving =
+            s.tab[selected.col]
+                .slice(selected.index);
+
+    } else {
+
+        moving = [
+            s.waste.at(-1)
+        ];
+    }
+
+
+    if (!moving.length) {
+        return false;
+    }
+
+
+    let top =
+        s.tab[target].at(-1);
+
+
+    let valid;
+
+
+    if (!top) {
+
+        valid =
+            moving[0].value === 13;
+
+    } else {
+
+        valid =
+            top.up &&
+            moving[0].up &&
+            moving[0].red !== top.red &&
+            moving[0].value === top.value - 1;
+    }
+
+
+    if (!valid) {
+        return false;
+    }
+
+
+    if (selected.type === "tab") {
+
+        s.tab[selected.col]
+            .splice(selected.index);
+
+    } else {
+
+        s.waste.pop();
+    }
+
+
+    s.tab[target].push(...moving);
+
+
+    if (
+        selected.type === "tab" &&
+        s.tab[selected.col].length
+    ) {
+
+        let last =
+            s.tab[selected.col].at(-1);
+
+        if (!last.up) {
+            last.up = true;
+        }
+    }
+
+
+    s.moves++;
+
+    s.selected = null;
+
+    renderSolitaire();
+
+    return true;
+}
+
+
+function solTryFoundationFromSelection() {
+
+    if (!s.selected) {
+        return false;
+    }
+
+
+    let selected =
+        s.selected;
+
+
+    let card;
+
+
+    if (selected.type === "tab") {
+
+        if (
+            selected.index !==
+            s.tab[selected.col].length - 1
+        ) {
+            return false;
+        }
+
+        card =
+            s.tab[selected.col][selected.index];
+
+    } else {
+
+        card =
+            s.waste.at(-1);
+    }
+
+
+    if (!card) {
+        return false;
+    }
+
+
+    let foundationIndex =
+        suits.indexOf(card.suit);
+
+    let foundation =
+        s.found[foundationIndex];
+
+    let top =
+        foundation.at(-1);
+
+
+    let valid =
+
+        (!top && card.value === 1) ||
+
+        (
+            top &&
+            card.value === top.value + 1
+        );
+
+
+    if (!valid) {
+        return false;
+    }
+
+
+    if (selected.type === "tab") {
+
+        s.tab[selected.col].pop();
+
+        if (s.tab[selected.col].length) {
+
+            let last =
+                s.tab[selected.col].at(-1);
+
+            if (!last.up) {
+                last.up = true;
+            }
+        }
+
+    } else {
+
+        s.waste.pop();
+    }
+
+
+    foundation.push(card);
+
+    s.moves++;
+
+    s.selected = null;
+
+    renderSolitaire();
+
+
+    if (
+        s.found.every(
+            foundation =>
+                foundation.length === 13
+        )
+    ) {
+
+        win(
+            "You won!",
+            "You cleared the deck."
+        );
+    }
+
+
+    return true;
+}
+
+
+function solFoundation(index) {
+
+    if (!s.selected) {
+        return;
+    }
+
+    solTryFoundationFromSelection();
+}
+
+
+function solDraw() {
+
+    if (s.stock.length) {
+
+        s.waste.push({
+
+            ...s.stock.pop(),
+
+            up: true
+        });
+
+        s.moves++;
+
+    } else {
+
+        s.stock =
+            s.waste
+                .reverse()
+                .map(card => ({
+                    ...card,
+                    up: false
+                }));
+
+        s.waste = [];
+    }
+
+
+    s.selected = null;
+
+    renderSolitaire();
+}
+
+
+/* =====================================================
+   SNAKE
+===================================================== */
+
+let snakeTimer = null;
+let snakeCtx;
+let snake;
+let food;
+let snakeScore = 0;
+
+let dir = {
+    x: 1,
+    y: 0
+};
+
+let nextDir = {
+    x: 1,
+    y: 0
+};
+
+
+function initSnake() {
+
+    document
+        .getElementById("gameMount")
+        .innerHTML = `
+
+        <div class="statusbar">
+
+            <span class="pill">
+                Score:
+                <b id="snakeScore">0</b>
+            </span>
+
+            <button
+                class="btn"
+                onclick="initSnake()"
+            >
+                New Game
+            </button>
+
+        </div>
+
+
+        <div class="canvas-wrap">
+
+            <canvas
+                id="snakeCanvas"
+                class="game-canvas"
+                width="500"
+                height="500"
+            ></canvas>
+
+            <div class="keys">
+                Use Arrow Keys or WASD
+            </div>
+
+        </div>
+    `;
+
+
+    let canvas =
+        document.getElementById("snakeCanvas");
+
+    snakeCtx =
+        canvas.getContext("2d");
+
+
+    snake = [
+        {x:10, y:10},
+        {x:9, y:10},
+        {x:8, y:10}
+    ];
+
+
+    food = {
+        x:15,
+        y:15
+    };
+
+
+    snakeScore = 0;
+
+
+    dir = {
+        x:1,
+        y:0
+    };
+
+
+    nextDir = {
+        x:1,
+        y:0
+    };
+
+
+    clearInterval(snakeTimer);
+
+    snakeTimer =
+        setInterval(
+            stepSnake,
+            110
+        );
+}
+
+
+function stepSnake() {
+
+    dir = nextDir;
+
+
+    let head = {
+
+        x:
+            snake[0].x +
+            dir.x,
+
+        y:
+            snake[0].y +
+            dir.y
+    };
+
+
+    if (
+        head.x < 0 ||
+        head.y < 0 ||
+        head.x >= 25 ||
+        head.y >= 25 ||
+        snake.some(
+            part =>
+                part.x === head.x &&
+                part.y === head.y
+        )
+    ) {
+
+        clearInterval(snakeTimer);
+
+        win(
+            "Game Over",
+            "Your score was " + snakeScore + "."
+        );
+
+        return;
+    }
+
+
+    snake.unshift(head);
+
+
+    if (
+        head.x === food.x &&
+        head.y === food.y
+    ) {
+
+        snakeScore++;
+
+        document
+            .getElementById("snakeScore")
+            .textContent = snakeScore;
+
+
+        do {
+
+            food = {
+
+                x:
+                    Math.floor(
+                        Math.random() * 25
+                    ),
+
+                y:
+                    Math.floor(
+                        Math.random() * 25
+                    )
+            };
+
+        } while (
+            snake.some(
+                part =>
+                    part.x === food.x &&
+                    part.y === food.y
+            )
+        );
+
+    } else {
+
+        snake.pop();
+    }
+
+
+    drawSnake();
+}
+
+
+function drawSnake() {
+
+    snakeCtx.fillStyle =
+        "#06101e";
+
+    snakeCtx.fillRect(
+        0,
+        0,
+        500,
+        500
+    );
+
+
+    snakeCtx.fillStyle =
+        "#ff5f6d";
+
+    snakeCtx.fillRect(
+        food.x * 20,
+        food.y * 20,
+        20,
+        20
+    );
+
+
+    snake.forEach(
+        (part, index) => {
+
+            snakeCtx.fillStyle =
+                index
+                ? "#4ecb76"
+                : "#7ff29a";
+
+            snakeCtx.fillRect(
+                part.x * 20 + 1,
+                part.y * 20 + 1,
+                18,
+                18
+            );
+        }
+    );
+}
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            currentGame !== "snake"
+        ) {
+            return;
+        }
+
+
+        let key =
+            event.key.toLowerCase();
+
+
+        if (
+            (
+                key === "arrowup" ||
+                key === "w"
+            ) &&
+            dir.y !== 1
+        ) {
+
+            nextDir = {
+                x:0,
+                y:-1
+            };
+        }
+
+
+        if (
+            (
+                key === "arrowdown" ||
+                key === "s"
+            ) &&
+            dir.y !== -1
+        ) {
+
+            nextDir = {
+                x:0,
+                y:1
+            };
+        }
+
+
+        if (
+            (
+                key === "arrowleft" ||
+                key === "a"
+            ) &&
+            dir.x !== 1
+        ) {
+
+            nextDir = {
+                x:-1,
+                y:0
+            };
+        }
+
+
+        if (
+            (
+                key === "arrowright" ||
+                key === "d"
+            ) &&
+            dir.x !== -1
+        ) {
+
+            nextDir = {
+                x:1,
+                y:0
+            };
+        }
+    }
+);
+
+
+/* =====================================================
+   APPLE CATCHER
+===================================================== */
+
+let appleTimer = null;
+let appleScore = 0;
+let appleX = 50;
+let appleObjects = [];
+
+
+function initApple() {
+
+    document
+        .getElementById("gameMount")
+        .innerHTML = `
+
+        <div class="statusbar">
+
+            <span class="pill">
+                Score:
+                <b id="appleScore">0</b>
+            </span>
+
+            <button
+                class="btn"
+                onclick="initApple()"
+            >
+                New Game
+            </button>
+
+        </div>
+
+
+        <div
+            class="apple-board"
+            id="appleBoard"
+        >
+
+            <div
+                id="basket"
+                class="apple-basket"
+            ></div>
+
+        </div>
+
+
+        <div class="keys">
+            Move with ← → or A / D
+        </div>
+    `;
+
+
+    appleScore = 0;
+
+    appleX = 50;
+
+    appleObjects = [];
+
+
+    clearInterval(appleTimer);
+
+
+    appleTimer =
+        setInterval(
+            stepApple,
+            30
+        );
+
+
+    spawnApple();
+}
+
+
+function spawnApple() {
+
+    appleObjects.push({
+
+        x:
+            Math.random() * 92,
+
+        y: -10,
+
+        speed:
+            0.45 +
+            Math.random() * 0.5
+    });
+}
+
+
+function stepApple() {
+
+    let board =
+        document.getElementById(
+            "appleBoard"
+        );
+
+
+    if (!board) {
+        return;
+    }
+
+
+    let basket =
+        document.getElementById(
+            "basket"
+        );
+
+
+    basket.style.left =
+        appleX + "%";
+
+
+    if (
+        Math.random() < 0.025 &&
+        appleObjects.length < 7
+    ) {
+
+        spawnApple();
+    }
+
+
+    board
+        .querySelectorAll(".apple")
+        .forEach(
+            element =>
+                element.remove()
+        );
+
+
+    let next = [];
+
+
+    for (
+        let apple of appleObjects
+    ) {
+
+        apple.y += apple.speed;
+
+
+        if (apple.y > 88) {
+
+            let distance =
+                Math.abs(
+                    apple.x - appleX
+                );
+
+
+            if (distance < 9) {
+
+                appleScore++;
+
+                document
+                    .getElementById(
+                        "appleScore"
+                    )
+                    .textContent =
+                        appleScore;
+
+            }
+
+            else if (
+                apple.y > 100
+            ) {
+
+                clearInterval(
+                    appleTimer
+                );
+
+                win(
+                    "Game Over",
+                    "You caught " +
+                    appleScore +
+                    " apples."
+                );
+
+                return;
+            }
+
+            else {
+
+                next.push(apple);
+            }
+
+        }
+
+        else {
+
+            next.push(apple);
+        }
+
+
+        if (apple.y <= 100) {
+
+            let element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "apple";
+
+
+            element.textContent =
+                "🍎";
+
+
+            element.style.left =
+                apple.x + "%";
+
+
+            element.style.top =
+                apple.y + "%";
+
+
+            board.appendChild(
+                element
+            );
+        }
+    }
+
+
+    appleObjects = next;
+}
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            currentGame !== "apple"
+        ) {
+            return;
+        }
+
+
+        if (
+            event.key === "ArrowLeft" ||
+            event.key.toLowerCase() === "a"
+        ) {
+
+            appleX =
+                Math.max(
+                    7,
+                    appleX - 4
+                );
+        }
+
+
+        if (
+            event.key === "ArrowRight" ||
+            event.key.toLowerCase() === "d"
+        ) {
+
+            appleX =
+                Math.min(
+                    93,
+                    appleX + 4
+                );
+        }
+    }
+);
+
+
+/* =====================================================
+   MINESWEEPER
+===================================================== */
+
+let mine = [];
+
+const MW = 9;
+const MH = 9;
+const MINES = 10;
+
+
+function initMines() {
+
+    mine =
+        Array.from(
+            {
+                length:
+                    MW * MH
+            },
+            () => ({
+                m:false,
+                o:false,
+                f:false,
+                n:0
+            })
+        );
+
+
+    let ids =
+        [
+            ...Array(
+                MW * MH
+            ).keys()
+        ];
+
+
+    shuffle(ids);
+
+
+    ids
+        .slice(0, MINES)
+        .forEach(
+            index => {
+                mine[index].m = true;
+            }
+        );
+
+
+    for (
+        let y = 0;
+        y < MH;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < MW;
+            x++
+        ) {
+
+            let index =
+                y * MW + x;
+
+
+            if (
+                !mine[index].m
+            ) {
+
+                mine[index].n =
+                    countMines(
+                        x,
+                        y
+                    );
+            }
+        }
+    }
+
+
+    renderMines();
+}
+
+
+function countMines(x, y) {
+
+    let count = 0;
+
+
+    for (
+        let dy = -1;
+        dy <= 1;
+        dy++
+    ) {
+
+        for (
+            let dx = -1;
+            dx <= 1;
+            dx++
+        ) {
+
+            let nx =
+                x + dx;
+
+            let ny =
+                y + dy;
+
+
+            if (
+                nx >= 0 &&
+                nx < MW &&
+                ny >= 0 &&
+                ny < MH &&
+                mine[
+                    ny * MW + nx
+                ].m
+            ) {
+
+                count++;
+            }
+        }
+    }
+
+
+    return count;
+}
+
+
+function renderMines() {
+
+    let html = `
+
+        <div class="statusbar">
+
+            <span class="pill">
+                Mines:
+                ${MINES}
+            </span>
+
+            <button
+                class="btn"
+                onclick="initMines()"
+            >
+                New Game
+            </button>
+
+        </div>
+
+
+        <div class="mine-board">
+    `;
+
+
+    mine.forEach(
+        (cell, index) => {
+
+            let classes =
+                "mine-cell";
+
+
+            if (cell.o) {
+                classes += " open";
+            }
+
+
+            if (cell.f) {
+                classes += " flag";
+            }
+
+
+            let text = "";
+
+
+            if (cell.f) {
+
+                text = "⚑";
+
+            } else if (cell.o) {
+
+                if (cell.m) {
+
+                    text = "💣";
+
+                } else {
+
+                    text =
+                        cell.n || "";
+                }
+            }
+
+
+            html += `
+
+                <button
+                    class="${classes}"
+                    onclick="
+                        mineOpen(${index})
+                    "
+                    oncontextmenu="
+                        mineFlag(
+                            event,
+                            ${index}
+                        )
+                    "
+                >
+                    ${text}
+                </button>
+            `;
+        }
+    );
+
+
+    html += `
+        </div>
+
+        <div class="keys">
+            Left click to open •
+            Right click to flag
+        </div>
+    `;
+
+
+    document
+        .getElementById("gameMount")
+        .innerHTML = html;
+}
+
+
+function mineOpen(index) {
+
+    let cell =
+        mine[index];
+
+
+    if (
+        cell.o ||
+        cell.f
+    ) {
+        return;
+    }
+
+
+    if (cell.m) {
+
+        mine.forEach(
+            item => {
+
+                if (item.m) {
+                    item.o = true;
+                }
+            }
+        );
+
+
+        renderMines();
+
+
+        win(
+            "Boom!",
+            "You hit a mine."
+        );
+
+
+        return;
+    }
+
+
+    let stack = [index];
+
+    let seen = new Set();
+
+
+    while (stack.length) {
+
+        let current =
+            stack.pop();
+
+
+        if (
+            seen.has(current)
+        ) {
+            continue;
+        }
+
+
+        seen.add(current);
+
+
+        mine[current].o = true;
+
+
+        if (
+            mine[current].n === 0
+        ) {
+
+            let x =
+                current % MW;
+
+            let y =
+                Math.floor(
+                    current / MW
+                );
+
+
+            for (
+                let dy = -1;
+                dy <= 1;
+                dy++
+            ) {
+
+                for (
+                    let dx = -1;
+                    dx <= 1;
+                    dx++
+                ) {
+
+                    let nx =
+                        x + dx;
+
+                    let ny =
+                        y + dy;
+
+
+                    if (
+                        nx >= 0 &&
+                        nx < MW &&
+                        ny >= 0 &&
+                        ny < MH
+                    ) {
+
+                        stack.push(
+                            ny * MW + nx
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+
+    renderMines();
+
+
+    if (
+        mine.filter(
+            item =>
+                !item.m &&
+                !item.o
+        ).length === 0
+    ) {
+
+        win(
+            "You won!",
+            "You cleared the minefield."
+        );
+    }
+}
+
+
+function mineFlag(event, index) {
+
+    event.preventDefault();
+
+
+    let cell =
+        mine[index];
+
+
+    if (!cell.o) {
+
+        cell.f =
+            !cell.f;
+    }
+
+
+    renderMines();
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+goHome();
+
 </script>
+
 </body>
 </html>
